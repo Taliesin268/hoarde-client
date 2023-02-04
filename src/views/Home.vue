@@ -9,6 +9,7 @@
       card-rules-text="Chaotic Evil, unchangeable. Trumps unchangeable." card-alignments="Chaotic Evil"
       card-image="tiamat.png" />
     <Card />
+    <RouterLink to="/cards">Go to cards</RouterLink>
   </main>
 </template>
 
