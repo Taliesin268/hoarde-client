@@ -4,7 +4,7 @@
             <h1 class="card-name">{{ cardName }}</h1>
             <div class="card-wager">{{ cardWager }}</div>
         </div>
-        <img :src="require('@/images/' + image + '')" :style="cardImageOptions">
+        <img :src="imageURL" :style="cardImageOptions">
         <div class="textbox" :class="cardAlignments ? cardAlignments.toLowerCase() : ''">
             <span class="type" v-if="cardType">{{ cardType }}</span>
             <span class="rules-text">{{ cardRulesText }}</span>
@@ -120,8 +120,8 @@ export default {
         cardImageOptions: {}
     },
     computed: {
-        image() {
-            return this.cardImage || 'unknown.png';
+        imageURL() {
+            return this.cardImage || require('@/images/unknown.png');
         }
     }
 }
