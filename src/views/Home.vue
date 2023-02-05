@@ -1,14 +1,6 @@
 <template>
   <main>
-    <Card card-name="Aspect of Bahamut" :card-wager=13 card-type="Dragon"
-      card-rules-text="Lawful Good, unchangeable. Trumps unchangeable." card-alignments="Lawful Good"
-      card-image="bahamut.png" :card-image-options="{
-        'object-position': '25% 75%'
-      }" />
-    <Card card-name="Aspect of Tiamat" :card-wager=13 card-type="Dragon"
-      card-rules-text="Chaotic Evil, unchangeable. Trumps unchangeable." card-alignments="Chaotic Evil"
-      card-image="tiamat.png" />
-    <Card />
+    <button @click="createUser()">Create User</button>
     <RouterLink to="/cards">Go to cards</RouterLink>
   </main>
 </template>
@@ -28,9 +20,15 @@ main {
 
 <script>
 import Card from '@/components/Card.vue'
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Home',
-  components: { Card }
+  components: { Card },
+  methods: {
+    ...mapActions([
+      'createUser'
+    ])
+  }
 }
 </script>

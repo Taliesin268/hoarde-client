@@ -24,6 +24,17 @@ export default createStore({
         alert(error);
         console.log(error);
       }
+    },
+    async createUser({ commit }) {
+      try {
+        const data = await axios.post("http://localhost:4000/users", {
+          name: "Adrien2"
+        });
+        console.log(data);
+      } catch (error) {
+        alert(error);
+        console.log(error);
+      }
     }
   },
   modules: {
