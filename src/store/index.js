@@ -27,9 +27,7 @@ export default createStore({
     },
     async createUser({ commit }) {
       try {
-        const data = await axios.post("http://localhost:4000/users", {
-          name: "Adrien2"
-        });
+        const data = await axios.post("http://localhost:4000/users");
         console.log(data);
       } catch (error) {
         alert(error);
