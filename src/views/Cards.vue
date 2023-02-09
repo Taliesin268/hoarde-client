@@ -3,7 +3,7 @@
     <div v-for="card in cards">
       <Card :card-name="card.name" :card-wager="card.wager" :card-type="card.type" 
       :card-rules-text="card.rules_text" :card-alignments="card.alignments"
-      :card-image="card.image_url" :card-image-options="JSON.parse(card.image_options)"/>
+      :card-image="card.image_url" :card-image-options="'image_options' in card ? JSON.parse(card.image_options) : ''"/>
     </div>
   </div>
 </template>
