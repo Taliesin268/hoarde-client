@@ -3,14 +3,24 @@ import axios from 'axios'
 
 export default createStore({
   state: {
-    cards: []
+    cards: [],
+    user: {
+      id: null,
+      name: null
+    }
   },
   getters: {
-    getCards: (state) => state.cards
+    getCards: (state) => state.cards,
+    getUser: (state) => state.user
   },
   mutations: {
     SET_CARDS(state, cards) {
       state.cards = cards;
+    },
+    SET_USER(state, user){
+      state.user.id = user.id;
+      state.user.name = user.name;
+      localStorage.setItem('user', JSON.stringify(user));
     }
   },
   actions: {
@@ -28,7 +38,9 @@ export default createStore({
     async createUser({ commit }) {
       try {
         const data = await axios.post("http://localhost:4000/users");
+        console.log('Created new user:');
         console.log(data);
+        commit("SET_USER", data.data.user);
       } catch (error) {
         alert(error);
         console.log(error);

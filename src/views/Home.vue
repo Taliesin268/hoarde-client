@@ -1,6 +1,6 @@
 <template>
   <main>
-    <button @click="createUser()">Create User</button>
+    <h1>Hello {{ getUser().name }}</h1>
     <RouterLink to="/cards">Go to cards</RouterLink>
   </main>
 </template>
@@ -15,19 +15,20 @@ main {
   min-height: 100vh;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 </style>
 
 <script>
 import Card from '@/components/Card.vue'
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
   components: { Card },
   methods: {
-    ...mapActions([
-      'createUser'
+    ...mapGetters([
+      'getUser'
     ])
   }
 }
