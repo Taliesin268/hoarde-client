@@ -2,6 +2,7 @@
   <main>
     <h1>Hello {{ getUser().name }}</h1>
     <RouterLink to="/cards">Go to cards</RouterLink>
+    <button @click="this.createNewGame">Create New Game</button>
   </main>
 </template>
 
@@ -29,7 +30,10 @@ export default {
   methods: {
     ...mapGetters([
       'getUser'
-    ])
+    ]),
+    ...mapActions('game', [
+      'createNewGame'
+    ]),
   }
 }
 </script>

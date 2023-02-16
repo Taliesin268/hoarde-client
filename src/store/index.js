@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
+import game from './modules/game.js'
 
 export default createStore({
   state: {
@@ -48,5 +49,6 @@ export default createStore({
     }
   },
   modules: {
+    game
   }
 })
