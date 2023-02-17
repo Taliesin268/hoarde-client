@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { io } from 'socket.io-client'
 import router from '../../router'
 
 export default {
@@ -15,6 +16,9 @@ export default {
     mutations: {
         SET_GAME_ID(state, id) {
             state.game.id = id
+        },
+        SET_SOCKET(state, socket) {
+            state.game.socket = socket
         }
     },
     actions: {
@@ -33,5 +37,13 @@ export default {
         setGameId({ commit }, id) {
             commit('SET_GAME_ID', id)
         },
+        connectToSocket({ state, commit }) {
+            console.log(`attempting to connect to http://localhost:4000/`)
+            const socket = io('http://localhost:4000');
+
+            socket.on('connect', () => {
+                console.log('Connected to socket.io server!');
+            });
+        }
     }
 }

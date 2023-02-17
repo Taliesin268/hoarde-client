@@ -7,10 +7,12 @@ export default {
   name: 'Game',
   created() {
     this.setGameId(this.$route.params.id)
+    this.connectToSocket()
   },
   methods: {
     ...mapActions({
-      setGameId: 'game/setGameId'
+      setGameId: 'game/setGameId',
+      connectToSocket: 'game/connectToSocket'
     }),
     ...mapGetters({
       gameId: 'game/getGameId'
