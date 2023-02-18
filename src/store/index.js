@@ -6,8 +6,8 @@ export default createStore({
   state: {
     cards: [],
     user: {
-      id: null,
-      name: null
+      id: null, // The UUID of the current user with the server
+      name: null // The user's username
     }
   },
   getters: {
@@ -25,6 +25,9 @@ export default createStore({
     }
   },
   actions: {
+    /**
+     * Fetches all cards from the server as an array of JSON objects.
+     */
     async fetchCards({ commit }) {
       try {
         const data = await axios.get(
@@ -36,6 +39,9 @@ export default createStore({
         console.log(error);
       }
     },
+    /**
+     * Creates a new user with the server and sets its details in the local storage.
+     */
     async createUser({ commit }) {
       try {
         const data = await axios.post("http://localhost:4000/users");

@@ -6,33 +6,29 @@ export default {
     namespaced: true,
     state: {
         game: {
-            id: null,
-            socket: {
-                state: 'Disconnected',
-                connection: null
-            }
+            id: null, // The ID of the game in the database (and the URL)
+            socketState: 'Disconnected' // Whether or not we're connected to the server
         }
     },
     getters: {
         getGameId: (state) => state.game.id,
-        getConnectionState: (state) => state.game.socket.state,
+        getConnectionState: (state) => state.game.socketState,
     },
     mutations: {
         SET_GAME_ID(state, id) {
             state.game.id = id
         },
-        SET_SOCKET(state, socket) {
-            state.game.socket.connection = socket
-        },
         SET_CONNECTION_STATE(state, conState) {
-            state.game.socket.state = conState
+            state.game.socketState = conState
         }
     },
     actions: {
+        /**
+         * Creates a new game.
+         */
         async createNewGame({ commit, rootState }) {
-            console.log('calling createNewGame')
-            console.log(rootState.user.id);
             try {
+                // Create a new game, and once we know the ID, go to that game in this client.
                 const data = await axios.post('http://localhost:4000/games', { user_id: rootState.user.id })
                 router.push(`/game/${data.data.game.id}`)
                 commit('SET_GAME_ID', data.data.game.id)
@@ -41,6 +37,10 @@ export default {
                 console.log(error);
             }
         },
+        /**
+         * Sets the game ID explicitely. Used when connecting to an existing game.
+         * @param {string} id The ID of the game with the server
+         */
         setGameId({ commit }, id) {
             commit('SET_GAME_ID', id)
         },
@@ -56,16 +56,12 @@ export default {
             socket.on('connect', () => {
                 console.log('Connected to socket.io server!');
                 commit('SET_CONNECTION_STATE', 'Connected')
-                //socket.state = 'Connected'
             });
 
             socket.on('disconnect', () => {
                 console.log('Disconnected from socket.io server.');
-                //socket.state = 'Disconnected'
                 commit('SET_CONNECTION_STATE', 'Disconnected')
             })
-
-            commit('SET_SOCKET', socket)
         }
     }
 }

@@ -36,6 +36,7 @@ export default {
     })
   },
   mounted() {
+    // When this page loads, fetch all cards from the server and log them
     this.fetchCards().then(()=>{console.log (this.cards)});
   }
 }
