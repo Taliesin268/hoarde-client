@@ -46,6 +46,8 @@ export default createStore({
     /**
      * Creates a new user with the server and sets its details in the local storage.
      * 
+     * Makes sure not to duplicate users by checking for promises in progress or existing users in state or storage.
+     * 
      * @returns {object|Promise} Either returns a user with ID and name, or returns a promise that will resolve into that
      */
     async createUser({ commit, state }) {
