@@ -8,14 +8,17 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Game',
-  created() {
+  mounted() {
     this.setGameId(this.$route.params.id)
-    this.connectToSocket()
+    this.createUser().then(() => {
+      this.connectToSocket()
+    })
   },
   methods: {
     ...mapActions({
       setGameId: 'game/setGameId',
-      connectToSocket: 'game/connectToSocket'
+      connectToSocket: 'game/connectToSocket',
+      createUser: 'createUser'
     }),
     ...mapGetters({
       gameId: 'game/getGameId',
