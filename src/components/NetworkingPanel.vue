@@ -33,6 +33,7 @@ export default {
     background-color: white;
     box-shadow: -1px 0px 3px rgba(0, 0, 0, 0.5);
     height: 100%;
+    width: 100%;
 }
 
 .event {

@@ -65,15 +65,21 @@ const actions = <ActionTree<State, any>>{
 
         socket.on('connect', () => {
             console.log('Connected to socket.io server!');
-            commit('SET_CONNECTION_STATE', 'Connected');
+            commit(MUTATIONS.SET_CONNECTION_STATE, 'Connected');
             commit(MUTATIONS.ADD_EVENT, { name: "connect", body: `Connected with Socket ID: ${socket.id}` });
         });
 
+        socket.on('game update', (update) => {
+            console.log('heard a game update');
+            commit(MUTATIONS.ADD_EVENT, {name: "Game Update", body: update});
+        })
+
         socket.on('disconnect', () => {
             console.log('Disconnected from socket.io server.');
-            commit('SET_CONNECTION_STATE', 'Disconnected')
+            commit(MUTATIONS.SET_CONNECTION_STATE, 'Disconnected')
             commit(MUTATIONS.ADD_EVENT, { name: "disconnect", body: `Disconnected with Socket ID: ${socket.id}` });
         })
+
     }
 }
 
