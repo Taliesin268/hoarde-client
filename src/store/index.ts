@@ -1,7 +1,5 @@
-import { createStore } from 'vuex'
 import axios from 'axios'
 import game from '@/store/modules/game.js'
-
 import Vuex from 'vuex'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
 

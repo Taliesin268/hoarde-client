@@ -1,6 +1,6 @@
 <template>
     <div class="network-events">
-        <div class="event" v-for="event in events" :key="event.id">
+        <div class="event" v-for="event in events.slice().reverse()" :key="event.id">
             <div class="event-header" @click="toggleEvent(event)">
                 <span class="event-name">{{ event.name }}</span>
                 <span class="event-arrow">{{ event.expanded ? '▼' : '►' }}</span>
@@ -32,6 +32,7 @@ export default {
 .network-events {
     background-color: white;
     box-shadow: -1px 0px 3px rgba(0, 0, 0, 0.5);
+    height: 100%;
 }
 
 .event {
@@ -40,7 +41,6 @@ export default {
 }
 
 .event > div {
-    
     padding: 5px;
 }
 
@@ -54,5 +54,10 @@ export default {
 
 .event-name {
     font-weight: bold;
+    word-wrap: normal;
+}
+
+.event-body {
+    word-wrap: normal;
 }
 </style>

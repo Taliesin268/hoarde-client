@@ -2,8 +2,13 @@ import axios from 'axios'
 import { io } from 'socket.io-client'
 import router from '../../router'
 
-import Vuex from 'vuex'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
+
+const MUTATIONS = {
+    SET_GAME_ID: 'SET_GAME_ID',
+    SET_CONNECTION_STATE: 'SET_CONNECTION_STATE',
+    ADD_EVENT: 'ADD_EVENT'
+}
 
 class Game {
     id: string | null = null
@@ -16,11 +21,14 @@ class State {
 }
 
 const mutations = <MutationTree<State>>{
-    SET_GAME_ID(state, id) {
+    [MUTATIONS.SET_GAME_ID](state, id) {
         state.game.id = id
     },
-    SET_CONNECTION_STATE(state, conState) {
+    [MUTATIONS.SET_CONNECTION_STATE](state, conState) {
         state.game.socketState = conState
+    },
+    [MUTATIONS.ADD_EVENT](state, event) {
+        state.events.push(event)
     }
 }
 
@@ -57,12 +65,14 @@ const actions = <ActionTree<State, any>>{
 
         socket.on('connect', () => {
             console.log('Connected to socket.io server!');
-            commit('SET_CONNECTION_STATE', 'Connected')
+            commit('SET_CONNECTION_STATE', 'Connected');
+            commit(MUTATIONS.ADD_EVENT, { name: "connect", body: `Connected with Socket ID: ${socket.id}` });
         });
 
         socket.on('disconnect', () => {
             console.log('Disconnected from socket.io server.');
             commit('SET_CONNECTION_STATE', 'Disconnected')
+            commit(MUTATIONS.ADD_EVENT, { name: "disconnect", body: `Disconnected with Socket ID: ${socket.id}` });
         })
     }
 }
@@ -70,11 +80,13 @@ const actions = <ActionTree<State, any>>{
 const getters = <GetterTree<State, any>>{
     getGameId: (state) => state.game.id,
     getConnectionState: (state) => state.game.socketState,
+    getEvents: (state) => state.events
 }
 
-export default new Vuex.Store({
+export default {
+    namespaced: true,
     state: new State(),
     mutations: mutations,
     actions: actions,
     getters: getters
-})
+}
