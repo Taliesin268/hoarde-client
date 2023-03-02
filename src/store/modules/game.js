@@ -8,7 +8,8 @@ export default {
         game: {
             id: null, // The ID of the game in the database (and the URL)
             socketState: 'Disconnected' // Whether or not we're connected to the server
-        }
+        },
+        events: []
     },
     getters: {
         getGameId: (state) => state.game.id,
