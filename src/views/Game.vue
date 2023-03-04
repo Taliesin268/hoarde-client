@@ -1,17 +1,15 @@
 <template>
   <div class="page-container">
     <div class="page-content">
-      <h1>You are in game {{ gameId() }}</h1>
-      <h2>Your connection state is {{ getConnectionState() }}</h2>
-      <JSONDisplay :formattedJson="JSON.stringify(getState(), null, 2)"></JSONDisplay>
+      <lobby v-if="!loading() && game().state.state == 'LobbyState'"></lobby>
     </div>
-    <NetworkingPanel :events="getEvents()"></NetworkingPanel>
   </div>
 </template>
 
 <style>
 .page-container {
-  display:flex;
+  display: flex;
+  height: 100%;
 }
 
 .network-events {
@@ -24,13 +22,13 @@
 .page-content {
   flex: 3;
   overflow: auto;
+  height: 100%;
 }
 </style>
 
 <script>
-import NetworkingPanel from '@/components/NetworkingPanel.vue';
-import JSONDisplay from '@/components/JSONDisplay.vue';
 import { mapActions, mapGetters } from 'vuex';
+import Lobby from '../components/Lobby'
 
 export default {
   name: "Game",
@@ -47,12 +45,10 @@ export default {
       createUser: "createUser"
     }),
     ...mapGetters({
-      gameId: "game/getGameId",
-      getConnectionState: "game/getConnectionState",
-      getEvents: "game/getEvents",
-      getState: "game/getState"
-    })
+      game: "game/getGame",
+      loading: "game/getLoading"
+    }),
   },
-  components: { NetworkingPanel, JSONDisplay }
+  components: { Lobby }
 }
 </script>

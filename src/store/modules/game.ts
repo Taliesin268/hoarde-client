@@ -1,39 +1,63 @@
 import axios from 'axios'
-import { io } from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
 import router from '../../router'
 
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
 
 const MUTATIONS = {
     SET_GAME_ID: 'SET_GAME_ID',
-    SET_CONNECTION_STATE: 'SET_CONNECTION_STATE',
+    SET_SOCKET: 'SET_SOCKET',
     ADD_EVENT: 'ADD_EVENT',
-    SET_STATE: 'SET_STATE'
+    SET_GAME: 'SET_GAME'
 }
 
-class Game {
-    id: string | null = null
-    socketState: string = 'Disconnected'
+type Game = { 
+    id: string
+    iteration: number
+    creator: { name: string, id: string }
+    player?: { name: string, id: string }
+    state: {
+        state: string
+        players: {
+            creator: string[],
+            player: string[]
+            guests: Record<string, { name: string, sockets: string[] }>
+        }
+    }
 }
 
 class State {
-    game: Game = new Game()
+    game: Game = {
+        id: "",
+        iteration: -1,
+        creator: {name: "", id: ""},
+        state: {
+            state: "",
+            players: {
+                creator: [],
+                player: [],
+                guests: {}
+            }
+        }
+    }
     events: Array<Object> = []
-    state: Object = {}
+    loading: Boolean = true
+    socket?: Socket
 }
 
 const mutations = <MutationTree<State>>{
     [MUTATIONS.SET_GAME_ID](state, id) {
         state.game.id = id
     },
-    [MUTATIONS.SET_CONNECTION_STATE](state, conState) {
-        state.game.socketState = conState
-    },
     [MUTATIONS.ADD_EVENT](state, event) {
         state.events.push(event)
     },
-    [MUTATIONS.SET_STATE](state, stateObject) {
-        state.state = stateObject
+    [MUTATIONS.SET_GAME](state, game) {
+        state.game = game;
+        state.loading = false;
+    },
+    [MUTATIONS.SET_SOCKET](state,socket) {
+        state.socket = socket
     }
 }
 
@@ -60,30 +84,26 @@ const actions = <ActionTree<State, any>>{
         commit('SET_GAME_ID', id)
     },
     connectToSocket({ state, commit, rootState }) {
-        console.log(`attempting to connect to http://localhost:4000/`)
         const socket = io('http://localhost:4000', {
             query: {
                 gameId: state.game.id,
                 userId: rootState.user.id
             }
         });
-
+        
         socket.on('connect', () => {
-            console.log('Connected to socket.io server!');
-            commit(MUTATIONS.SET_CONNECTION_STATE, 'Connected');
             commit(MUTATIONS.ADD_EVENT, { name: "connect", body: `Connected with Socket ID: ${socket.id}` });
+            commit(MUTATIONS.SET_SOCKET, socket)
         });
 
         socket.on('game update', (update) => {
-            console.log('heard a game update');
-            commit(MUTATIONS.ADD_EVENT, {name: "Game Update", body: update});
-            commit(MUTATIONS.SET_STATE, update)
+            commit(MUTATIONS.ADD_EVENT, { name: "Game Update", body: update });
+            commit(MUTATIONS.SET_GAME, update)
         })
 
         socket.on('disconnect', () => {
-            console.log('Disconnected from socket.io server.');
-            commit(MUTATIONS.SET_CONNECTION_STATE, 'Disconnected')
             commit(MUTATIONS.ADD_EVENT, { name: "disconnect", body: `Disconnected with Socket ID: ${socket.id}` });
+            commit(MUTATIONS.SET_SOCKET, null)
         })
 
     }
@@ -91,9 +111,9 @@ const actions = <ActionTree<State, any>>{
 
 const getters = <GetterTree<State, any>>{
     getGameId: (state) => state.game.id,
-    getConnectionState: (state) => state.game.socketState,
     getEvents: (state) => state.events,
-    getState: (state) => state.state
+    getGame: (state) => state.game,
+    getLoading: (state) => state.loading
 }
 
 export default {
