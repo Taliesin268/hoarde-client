@@ -7,7 +7,8 @@ import { GetterTree, MutationTree, ActionTree } from 'vuex'
 const MUTATIONS = {
     SET_GAME_ID: 'SET_GAME_ID',
     SET_CONNECTION_STATE: 'SET_CONNECTION_STATE',
-    ADD_EVENT: 'ADD_EVENT'
+    ADD_EVENT: 'ADD_EVENT',
+    SET_STATE: 'SET_STATE'
 }
 
 class Game {
@@ -18,6 +19,7 @@ class Game {
 class State {
     game: Game = new Game()
     events: Array<Object> = []
+    state: Object = {}
 }
 
 const mutations = <MutationTree<State>>{
@@ -29,6 +31,9 @@ const mutations = <MutationTree<State>>{
     },
     [MUTATIONS.ADD_EVENT](state, event) {
         state.events.push(event)
+    },
+    [MUTATIONS.SET_STATE](state, stateObject) {
+        state.state = stateObject
     }
 }
 
@@ -72,6 +77,7 @@ const actions = <ActionTree<State, any>>{
         socket.on('game update', (update) => {
             console.log('heard a game update');
             commit(MUTATIONS.ADD_EVENT, {name: "Game Update", body: update});
+            commit(MUTATIONS.SET_STATE, update)
         })
 
         socket.on('disconnect', () => {
@@ -86,7 +92,8 @@ const actions = <ActionTree<State, any>>{
 const getters = <GetterTree<State, any>>{
     getGameId: (state) => state.game.id,
     getConnectionState: (state) => state.game.socketState,
-    getEvents: (state) => state.events
+    getEvents: (state) => state.events,
+    getState: (state) => state.state
 }
 
 export default {

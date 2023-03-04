@@ -3,7 +3,7 @@
     <div class="page-content">
       <h1>You are in game {{ gameId() }}</h1>
       <h2>Your connection state is {{ getConnectionState() }}</h2>
-      <JSONDisplay :formattedJson="JSON.stringify(getEvents(), null, 2)"></JSONDisplay>
+      <JSONDisplay :formattedJson="JSON.stringify(getState(), null, 2)"></JSONDisplay>
     </div>
     <NetworkingPanel :events="getEvents()"></NetworkingPanel>
   </div>
@@ -49,7 +49,8 @@ export default {
     ...mapGetters({
       gameId: "game/getGameId",
       getConnectionState: "game/getConnectionState",
-      getEvents: "game/getEvents"
+      getEvents: "game/getEvents",
+      getState: "game/getState"
     })
   },
   components: { NetworkingPanel, JSONDisplay }
