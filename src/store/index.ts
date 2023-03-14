@@ -3,12 +3,12 @@ import game from '@/store/modules/game.js'
 import Vuex from 'vuex'
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
 
-class User {
-  id: string | null = null;
-  name: string | null = null;
+export class User {
+  id: string = '';
+  name: string = '';
 }
 
-class State {
+export class State {
   cards: Array<Object> = [];
   user: User = new User();
   createUserPromise: Promise<void> | null = null;

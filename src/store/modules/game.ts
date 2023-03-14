@@ -4,18 +4,25 @@ import router from '../../router'
 
 import { GetterTree, MutationTree, ActionTree } from 'vuex'
 
+import { User, State as RootState } from '../index.js'
+
 const MUTATIONS = {
     SET_GAME_ID: 'SET_GAME_ID',
     SET_SOCKET: 'SET_SOCKET',
     ADD_EVENT: 'ADD_EVENT',
-    SET_GAME: 'SET_GAME'
+    SET_GAME: 'SET_GAME',
+    SET_PLAYER: 'SET_PLAYER'
+}
+
+const GAME_ACTIONS = {
+    SELECT_OPPONENT:  'select opponent'
 }
 
 type Game = { 
     id: string
     iteration: number
-    creator: { name: string, id: string }
-    player?: { name: string, id: string }
+    creator: User
+    player?: User
     state: {
         state: string
         players: {
@@ -57,7 +64,12 @@ const mutations = <MutationTree<State>>{
         state.loading = false;
     },
     [MUTATIONS.SET_SOCKET](state,socket) {
-        state.socket = socket
+        state.socket = socket;
+    },
+    [MUTATIONS.SET_PLAYER](state, user: User) {
+        state.game.player = user;
+        state.game.state.players.player = state.game.state.players.guests[user.id].sockets
+        delete state.game.state.players.guests[user.id]
     }
 }
 
@@ -105,7 +117,18 @@ const actions = <ActionTree<State, any>>{
             commit(MUTATIONS.ADD_EVENT, { name: "disconnect", body: `Disconnected with Socket ID: ${socket.id}` });
             commit(MUTATIONS.SET_SOCKET, null)
         })
+    },
+    challengePlayer({ state, commit, getters }, user: User ) {
+        console.log(`Action called! With user ${JSON.stringify(user)}`)
+        // Check if socket is connected and is creator
+        if(!getters.isCreator) { alert('You are not the creator'); return; }
+        if(typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
 
+        // Update the state
+        commit(MUTATIONS.SET_PLAYER, user)
+
+        // Send action 
+        state.socket.emit(GAME_ACTIONS.SELECT_OPPONENT, user)
     }
 }
 
@@ -113,7 +136,8 @@ const getters = <GetterTree<State, any>>{
     getGameId: (state) => state.game.id,
     getEvents: (state) => state.events,
     getGame: (state) => state.game,
-    getLoading: (state) => state.loading
+    getLoading: (state) => state.loading,
+    isCreator: (state, getters, rootState: RootState) => rootState.user.id == state.game.creator.id
 }
 
 export default {
