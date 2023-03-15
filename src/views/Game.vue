@@ -1,5 +1,8 @@
 <template>
   <div class="page-container">
+    <div class="page-header">
+      <h1>Hi {{ getUser().name }}</h1>
+    </div>
     <div class="page-content">
       <lobby v-if="!loading() && game().state.state == 'LobbyState'"></lobby>
     </div>
@@ -10,6 +13,7 @@
 .page-container {
   display: flex;
   height: 100%;
+  flex-direction: column;
 }
 
 .network-events {
@@ -46,7 +50,8 @@ export default {
     }),
     ...mapGetters({
       game: "game/getGame",
-      loading: "game/getLoading"
+      loading: "game/getLoading",
+      getUser: "getUser"
     }),
   },
   components: { Lobby }

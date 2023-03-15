@@ -129,6 +129,9 @@ const actions = <ActionTree<State, any>>{
 
         // Send action 
         state.socket.emit(GAME_ACTIONS.SELECT_OPPONENT, user)
+    },
+    startGame({ state }) {
+        console.log('Starting game!')
     }
 }
 

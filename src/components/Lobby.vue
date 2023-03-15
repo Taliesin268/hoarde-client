@@ -1,14 +1,14 @@
 <template>
     <div>
-        <h1>{{ getUser().name }} VS {{ typeof getGame().player != 'undefined' ? getGame().player.name : '...' }}</h1>
-        <h2>Connected Users:</h2>
+        <h2>{{ `${getGame().creator.name} ${isCreator() ? '(You)' : ''}` }} VS {{ typeof getGame().player != 'undefined' ? getGame().player.name : '...' }}</h2>
+        <h3>Connected Users:</h3>
         <ul>
             <li  v-for="(user, userId) in getGame().state.players.guests">
-                <input @click="challengePlayer({ id: userId, name: user.name })" type="radio" :id="userId" :value="userId">
+                <input :disabled="!isCreator()" @click="challengePlayer({ id: userId, name: user.name })" type="radio" :id="userId" :value="userId">
                 <label :for="userId">{{ user.name }}</label>
             </li>
         </ul>
-        <button>Challenge Selected Player</button>
+        <button @click="startGame()" :disabled="typeof getGame().player == 'undefined' || !isCreator()">Challenge Selected Player</button>
     </div>
 </template>
 
@@ -20,10 +20,12 @@ export default {
     methods: {
         ...mapGetters({
             getGame: "game/getGame",
-            getUser: "getUser"
+            getUser: "getUser",
+            isCreator: "game/isCreator"
         }),
         ...mapActions({
-            challengePlayer: "game/challengePlayer"
+            challengePlayer: "game/challengePlayer",
+            startGame: "game/startGame"
         })
     },
 };
