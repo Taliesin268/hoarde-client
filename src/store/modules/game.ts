@@ -15,7 +15,8 @@ const MUTATIONS = {
 }
 
 const GAME_ACTIONS = {
-    SELECT_OPPONENT:  'select opponent'
+    SELECT_OPPONENT:  'select opponent',
+    START_GAME: 'start game'
 }
 
 type Game = { 
@@ -131,7 +132,11 @@ const actions = <ActionTree<State, any>>{
         state.socket.emit(GAME_ACTIONS.SELECT_OPPONENT, user)
     },
     startGame({ state }) {
+        if(typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
+        if(state.game.player == undefined) { alert('No player selected'); return;}
         console.log('Starting game!')
+        state.socket.emit(GAME_ACTIONS.START_GAME)
+        state.game.state.state = 'ProcessingState';
     }
 }
 

@@ -1,8 +1,5 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <h1>Hi {{ getUser().name }}</h1>
-    </div>
     <div class="page-content">
       <lobby v-if="!loading() && game().state.state == 'LobbyState'"></lobby>
     </div>
