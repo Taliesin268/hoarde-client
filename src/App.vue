@@ -10,7 +10,7 @@
 import { mapActions } from 'vuex';
 export default {
   created() {
-      this.createUser()
+    this.createUser()
   },
   methods: {
     ...mapActions([
