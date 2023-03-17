@@ -15,11 +15,64 @@ const MUTATIONS = {
 }
 
 const GAME_ACTIONS = {
-    SELECT_OPPONENT:  'select opponent',
+    SELECT_OPPONENT: 'select opponent',
     START_GAME: 'start game'
 }
 
-type Game = { 
+type Card = {
+    name: String;
+    wager: number;
+    rules_text: String;
+    alignments?: String;
+    type?: String;
+}
+
+enum Visibility {
+    Creator,
+    Player,
+    Private,
+    Public
+}
+
+enum MoralAlignment {
+    Good,
+    Evil,
+    Neutral
+}
+
+enum EthicalAlignment {
+    Lawful,
+    Chaotic,
+    Neutral
+}
+
+enum AlignmentTrait {
+    Unchangeable,
+    Dragon
+}
+
+enum Turn {
+    Player,
+    Creator,
+    None
+}
+
+type PlayerBoardState = {
+    board: Card[],
+    hand: {
+        card: Card,
+        visibility: Visibility
+    }[],
+    wager: number,
+    ethicalAlignment: {
+        alignment: EthicalAlignment,
+        traits: AlignmentTrait[]
+    },
+    first: boolean,
+    resting: boolean
+}
+
+type Game = {
     id: string
     iteration: number
     creator: User
@@ -30,6 +83,34 @@ type Game = {
             creator: string[],
             player: string[]
             guests: Record<string, { name: string, sockets: string[] }>
+        },
+        game?: {
+            deck: Card[],
+            discard: {
+                card: Card
+                visibility: Visibility
+            }[],
+            players: {
+                creator: {
+                    gold: number
+                },
+                player: {
+                    gold: number
+                }
+            },
+            effects: []; // TODO
+            turn: Turn;
+            round: {
+                number: number,
+                moralAlignment: {
+                    alignment: MoralAlignment,
+                    traits: AlignmentTrait[]
+                },
+                players: {
+                    creator: PlayerBoardState,
+                    player: PlayerBoardState
+                }
+            }
         }
     }
 }
@@ -38,7 +119,7 @@ class State {
     game: Game = {
         id: "",
         iteration: -1,
-        creator: {name: "", id: ""},
+        creator: { name: "", id: "" },
         state: {
             state: "",
             players: {
@@ -64,7 +145,7 @@ const mutations = <MutationTree<State>>{
         state.game = game;
         state.loading = false;
     },
-    [MUTATIONS.SET_SOCKET](state,socket) {
+    [MUTATIONS.SET_SOCKET](state, socket) {
         state.socket = socket;
     },
     [MUTATIONS.SET_PLAYER](state, user: User) {
@@ -103,7 +184,7 @@ const actions = <ActionTree<State, any>>{
                 userId: rootState.user.id
             }
         });
-        
+
         socket.on('connect', () => {
             commit(MUTATIONS.ADD_EVENT, { name: "connect", body: `Connected with Socket ID: ${socket.id}` });
             commit(MUTATIONS.SET_SOCKET, socket)
@@ -119,11 +200,11 @@ const actions = <ActionTree<State, any>>{
             commit(MUTATIONS.SET_SOCKET, null)
         })
     },
-    challengePlayer({ state, commit, getters }, user: User ) {
+    challengePlayer({ state, commit, getters }, user: User) {
         console.log(`Action called! With user ${JSON.stringify(user)}`)
         // Check if socket is connected and is creator
-        if(!getters.isCreator) { alert('You are not the creator'); return; }
-        if(typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
+        if (!getters.isCreator) { alert('You are not the creator'); return; }
+        if (typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
 
         // Update the state
         commit(MUTATIONS.SET_PLAYER, user)
@@ -132,8 +213,8 @@ const actions = <ActionTree<State, any>>{
         state.socket.emit(GAME_ACTIONS.SELECT_OPPONENT, user)
     },
     startGame({ state }) {
-        if(typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
-        if(state.game.player == undefined) { alert('No player selected'); return;}
+        if (typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
+        if (state.game.player == undefined) { alert('No player selected'); return; }
         console.log('Starting game!')
         state.socket.emit(GAME_ACTIONS.START_GAME)
         state.game.state.state = 'ProcessingState';
@@ -145,7 +226,8 @@ const getters = <GetterTree<State, any>>{
     getEvents: (state) => state.events,
     getGame: (state) => state.game,
     getLoading: (state) => state.loading,
-    isCreator: (state, getters, rootState: RootState) => rootState.user.id == state.game.creator.id
+    isCreator: (state, getters, rootState: RootState) => rootState.user.id == state.game.creator.id,
+    isPlayer: (state, getters, rootState: RootState) => state.game.player != undefined && rootState.user.id == state.game.player.id
 }
 
 export default {

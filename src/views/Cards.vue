@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .card-container {
   display: flex;
   align-items: center;
@@ -16,6 +16,11 @@
   width: 100%;
   flex-wrap: wrap;
 }
+
+.card {
+  margin: 10px
+}
+
 </style>
 
 <script>

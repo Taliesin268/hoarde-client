@@ -2,6 +2,7 @@
   <div class="page-container">
     <div class="page-content">
       <lobby v-if="!loading() && game().state.state == 'LobbyState'"></lobby>
+      <game-board v-if="game().state.game != undefined"></game-board>
     </div>
   </div>
 </template>
@@ -30,6 +31,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import Lobby from '../components/Lobby'
+import GameBoard from '../components/GameBoard'
 
 export default {
   name: "Game",
@@ -51,6 +53,6 @@ export default {
       getUser: "getUser"
     }),
   },
-  components: { Lobby }
+  components: { Lobby, GameBoard }
 }
 </script>

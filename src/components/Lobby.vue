@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="lobby-wrapper">
         <h1>Hi {{ getUser().name }}</h1>
         <h2>{{ `${getGame().creator.name} ${isCreator() ? '(You)' : ''}` }} VS {{ typeof getGame().player != 'undefined' ?
             getGame().player.name : '...' }}</h2>
@@ -15,6 +15,12 @@
             Player</button>
     </div>
 </template>
+
+<style>
+.lobby-wrapper {
+    margin-left: 20px;
+}
+</style>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
