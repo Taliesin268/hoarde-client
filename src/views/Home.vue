@@ -2,7 +2,6 @@
   <main>
     <h1>Hello {{ getUser().name }}</h1>
     <RouterLink to="/cards">Go to cards</RouterLink>
-    <RouterLink to="/board-test">Go to test game board</RouterLink>
     <button @click="this.createNewGame">Create New Game</button>
   </main>
 </template>
