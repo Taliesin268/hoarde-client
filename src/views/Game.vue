@@ -40,12 +40,14 @@ export default {
     this.createUser().then(() => {
       this.connectToSocket();
     });
+    this.fetchCards();
   },
   methods: {
     ...mapActions({
       setGameId: "game/setGameId",
       connectToSocket: "game/connectToSocket",
-      createUser: "createUser"
+      createUser: "createUser",
+      fetchCards: "fetchCards"
     }),
     ...mapGetters({
       game: "game/getGame",
