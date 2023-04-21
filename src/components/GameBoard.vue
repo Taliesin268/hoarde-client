@@ -1,10 +1,10 @@
 <template>
   <div class="grid-container">
-    <div class="item item-enemy-gold">
+    <div class="item item-enemy-gold" :class="{ 'player-active': enemy.turn }">
       <div class="item-title">Enemy Gold</div>
       <div class="item-body">{{ enemy.gold }}</div>
     </div>
-    <div class="item item-enemy-hand">
+    <div class="item item-enemy-hand" :class="{ 'player-active': enemy.turn }">
       <div class="item-title">Enemy Hand</div>
       <div class="item-body"><Card v-for="card in enemy.hand" v-bind="getCards()[card.card]"></Card></div>
     </div>
@@ -16,7 +16,7 @@
       <div class="item-title">Deck</div>
       <div class="item-body">{{ game.deck.length }} cards left in deck</div>
     </div>
-    <div class="item item-enemy-board">
+    <div class="item item-enemy-board" :class="{ 'player-active': enemy.turn }">
       <div class="item-title">Enemy Board</div>
       <div class="item-body">{{ enemy.board.length < 1 ? "" : enemy.board }}</div>
     </div>
@@ -24,31 +24,34 @@
       <div class="item-title">Discard</div>
       <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
     </div>
-    <div class="item item-board">
+    <div class="item item-board" :class="{ 'player-active': me.turn }">
       <div class="item-title">Board</div>
       <div class="item-body">{{ me.board.length < 1 ? "" : me.board }}</div>
     </div>
-    <div class="item item-gold">
+    <div class="item item-gold" :class="{ 'player-active': me.turn }">
       <div class="item-title">Gold</div>
       <div class="item-body">{{ me.gold }}</div>
     </div>
-    <div class="item item-hand">
+    <div class="item item-hand" :class="{ 'player-active': me.turn }">
       <div class="item-title">Hand</div>
       <div class="item-body"><Card v-for="card in me.hand" v-bind="getCards()[card.card]"></Card></div>
     </div>
-    <div class="item item-end-turn">
+    <div class="item item-end-turn" :class="{ 'player-active': me.turn }">
       <div class="item-title">End / Rest</div>
-      <div class="item-body"><button>End Turn</button></div>
+      <div class="item-body"><button :disabled="enemy.turn">End Turn</button></div>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: 20% 60% 20%;
-  grid-template-rows: 20% 30% 30% 20%;
+  grid-template-columns: 19.75% 59.5% 19.75%;
+  grid-template-rows: 19.75% 29.5% 29.5% 19.75%;
   height: 100%;
+  gap: 0.5%;
+  padding: 0.5%;
+  box-sizing: border-box;
 }
 
 .item {
@@ -138,11 +141,20 @@
 .item-hand .card:hover {
   top: -50%;
   height: 140%;
+  cursor: pointer;
 }
 
 .item-enemy-hand .card:hover {
   height: 140%;
   top: 10%;
+}
+
+.player-active {
+  box-shadow: 0px 0px 1rem 1px green;
+}
+
+button:not([disabled]):hover {
+  cursor: pointer;
 }
 
 </style>
