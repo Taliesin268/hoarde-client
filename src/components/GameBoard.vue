@@ -20,6 +20,15 @@
       <div class="item-title">Enemy Board</div>
       <div class="item-body">{{ enemy.board.length < 1 ? "" : enemy.board }}</div>
     </div>
+    <div class="item item-enemy-ethical-alignment item-ethical-alignment item-alignment" :class="enemy.ethicalAlignment">
+          <div class="item-body">{{ enemy.ethicalAlignment }}</div>
+    </div>
+    <div class="item item-player-ethical-alignment item-ethical-alignment item-alignment" :class="me.ethicalAlignment">
+          <div class="item-body">{{ me.ethicalAlignment }}</div>
+    </div>
+    <div class="item item-moral-alignment item-alignment" :class="game.round.moralAlignment">
+          <div class="item-body">{{ game.round.moralAlignment }}</div>
+    </div>
     <div class="item item-discard">
       <div class="item-title">Discard</div>
       <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
@@ -46,8 +55,8 @@
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: 19.75% 59.5% 19.75%;
-  grid-template-rows: 19.75% 29.5% 29.5% 19.75%;
+  grid-template-columns: 19.75% 29.5% 29.5% 19.75%;
+  grid-template-rows: 19.75% 27% 2% 2% 27% 19.75%;
   height: 100%;
   gap: 0.5%;
   padding: 0.5%;
@@ -86,46 +95,68 @@
 
 .item-enemy-hand {
   grid-row: 1;
-  grid-column: 2;
+  grid-column: 2 / span 2;
 }
 
 .item-effects {
-  grid-row: 1 / span 3;
+  grid-row: 1 / span 5;
+  grid-column: 4;
 }
 
 .item-deck {
-  grid-row: 2;
+  grid-row: 2 / span 2;
   grid-column: 1;
 }
 
 .item-enemy-board {
   grid-row: 2;
+  grid-column: 2 / span 2;
+}
+
+.item-alignment.Good { background-color: white;}
+.item-alignment.Evil { background-color: red; }
+.item-alignment.Lawful { background-color: gold; }
+.item-alignment.Chaotic { background-color: #4D1A69bb;}
+.item-alignment.Neutral { background-color: grey;}
+.item-ethical-alignment {
   grid-column: 2;
+  font-size: small;
+}
+.item-enemy-ethical-alignment {
+  grid-row: 3;
+}
+.item-player-ethical-alignment {
+  grid-row: 4;
+}
+
+.item-moral-alignment {
+  grid-row: 3 / span 2;
+  grid-column: 3;
 }
 
 .item-discard {
-  grid-row: 3;
+  grid-row: 4 / span 2;
   grid-column: 1;
 }
 
 .item-board {
-  grid-row: 3;
-  grid-column: 2;
+  grid-row: 5;
+  grid-column: 2 / span 2;
 }
 
 .item-gold {
-  grid-row: 4;
+  grid-row: 6;
   grid-column: 1;
 }
 
 .item-hand {
-  grid-row: 4;
-  grid-column: 2;
+  grid-row: 6;
+  grid-column: 2 / span 2;
 }
 
 .item-end-turn {
-  grid-row: 4;
-  grid-column: 3;
+  grid-row: 6;
+  grid-column: 4;
 }
 
 .item-end-turn button {
