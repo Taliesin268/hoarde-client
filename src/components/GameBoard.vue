@@ -39,7 +39,9 @@
           </div>
           <div class="item item-board" :class="{ 'player-active': me.turn }">
             <div class="item-title">Board</div>
-            <div class="item-body">{{ me.board.length < 1 ? "" : me.board }}</div>
+            <div class="item-body">
+                <Card v-for="card in me.board" v-bind="getCards()[card]"></Card>
+            </div>
             </div>
             <div class="item item-gold" :class="{ 'player-active': me.turn }">
               <div class="item-title">Gold</div>
@@ -48,7 +50,7 @@
             <div class="item item-hand" :class="{ 'player-active': me.turn }">
               <div class="item-title">Hand</div>
               <div class="item-body">
-                <Card v-for="card in me.hand" v-bind="getCards()[card.card]"></Card>
+                <Card v-for="card in me.hand" v-bind="getCards()[card.card]" @click="activateCard(card.card)"></Card>
               </div>
             </div>
             <div class="item item-end-turn" :class="{ 'player-active': me.turn }">
@@ -214,7 +216,7 @@ button:not([disabled]):hover {
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import Card from '@/components/Card.vue'
 
 export default defineComponent({
@@ -228,6 +230,9 @@ export default defineComponent({
       isPlayer: "game/isPlayer",
       getCards: "getCards"
     }),
+    ...mapActions({
+      activateCard: "game/activateCard"
+    })
   },
   computed: {
     me(): Record<string, any> {

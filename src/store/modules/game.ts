@@ -16,7 +16,8 @@ const MUTATIONS = {
 
 const GAME_ACTIONS = {
     SELECT_OPPONENT: 'select opponent',
-    START_GAME: 'start game'
+    START_GAME: 'start game',
+    ACTIVATE_CARD: 'activate card'
 }
 
 type Card = {
@@ -218,6 +219,12 @@ const actions = <ActionTree<State, any>>{
         console.log('Starting game!')
         state.socket.emit(GAME_ACTIONS.START_GAME)
         state.game.state.state = 'ProcessingState';
+    },
+    activateCard({ state, rootState }, id: number) {
+        if (typeof state.socket == 'undefined' || state.socket == null) { alert('Not connected to the server'); return; }
+        console.log(`Playing card: ${ rootState.cards[id].name } (${id})`)
+        state.socket.emit(GAME_ACTIONS.ACTIVATE_CARD, { card: id})
+        state.game.state.state = 'ProcessingState'
     }
 }
 
