@@ -6,50 +6,55 @@
     </div>
     <div class="item item-enemy-hand" :class="{ 'player-active': enemy.turn }">
       <div class="item-title">Enemy Hand</div>
-      <div class="item-body"><Card v-for="card in enemy.hand" v-bind="getCards()[card.card]"></Card></div>
+      <div class="item-body">
+        <Card v-for="card in enemy.hand" v-bind="getCards()[card.card]"></Card>
+      </div>
     </div>
     <div class="item item-effects">
       <div class="item-title">Effects</div>
       <div class="item-body">{{ game.effects.length < 1 ? "" : game.effects }}</div>
-    </div>
-    <div class="item item-deck">
-      <div class="item-title">Deck</div>
-      <div class="item-body">{{ game.deck.length }} cards left in deck</div>
-    </div>
-    <div class="item item-enemy-board" :class="{ 'player-active': enemy.turn }">
-      <div class="item-title">Enemy Board</div>
-      <div class="item-body">{{ enemy.board.length < 1 ? "" : enemy.board }}</div>
-    </div>
-    <div class="item item-enemy-ethical-alignment item-ethical-alignment item-alignment" :class="enemy.ethicalAlignment">
+      </div>
+      <div class="item item-deck">
+        <div class="item-title">Deck</div>
+        <div class="item-body">{{ game.deck.length }} cards left in deck</div>
+      </div>
+      <div class="item item-enemy-board" :class="{ 'player-active': enemy.turn }">
+        <div class="item-title">Enemy Board</div>
+        <div class="item-body">{{ enemy.board.length < 1 ? "" : enemy.board }}</div>
+        </div>
+        <div class="item item-enemy-ethical-alignment item-ethical-alignment item-alignment"
+          :class="enemy.ethicalAlignment">
           <div class="item-body">{{ enemy.ethicalAlignment }}</div>
-    </div>
-    <div class="item item-player-ethical-alignment item-ethical-alignment item-alignment" :class="me.ethicalAlignment">
+        </div>
+        <div class="item item-player-ethical-alignment item-ethical-alignment item-alignment"
+          :class="me.ethicalAlignment">
           <div class="item-body">{{ me.ethicalAlignment }}</div>
-    </div>
-    <div class="item item-moral-alignment item-alignment" :class="game.round.moralAlignment">
+        </div>
+        <div class="item item-moral-alignment item-alignment" :class="game.round.moralAlignment">
           <div class="item-body">{{ game.round.moralAlignment }}</div>
-    </div>
-    <div class="item item-discard">
-      <div class="item-title">Discard</div>
-      <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
-    </div>
-    <div class="item item-board" :class="{ 'player-active': me.turn }">
-      <div class="item-title">Board</div>
-      <div class="item-body">{{ me.board.length < 1 ? "" : me.board }}</div>
-    </div>
-    <div class="item item-gold" :class="{ 'player-active': me.turn }">
-      <div class="item-title">Gold</div>
-      <div class="item-body">{{ me.gold }}</div>
-    </div>
-    <div class="item item-hand" :class="{ 'player-active': me.turn }">
-      <div class="item-title">Hand</div>
-      <div class="item-body"><Card v-for="card in me.hand" v-bind="getCards()[card.card]"></Card></div>
-    </div>
-    <div class="item item-end-turn" :class="{ 'player-active': me.turn }">
-      <div class="item-title">End / Rest</div>
-      <div class="item-body"><button :disabled="enemy.turn">End Turn</button></div>
-    </div>
-  </div>
+        </div>
+        <div class="item item-discard">
+          <div class="item-title">Discard</div>
+          <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
+          </div>
+          <div class="item item-board" :class="{ 'player-active': me.turn }">
+            <div class="item-title">Board</div>
+            <div class="item-body">{{ me.board.length < 1 ? "" : me.board }}</div>
+            </div>
+            <div class="item item-gold" :class="{ 'player-active': me.turn }">
+              <div class="item-title">Gold</div>
+              <div class="item-body">{{ me.gold }}</div>
+            </div>
+            <div class="item item-hand" :class="{ 'player-active': me.turn }">
+              <div class="item-title">Hand</div>
+              <div class="item-body">
+                <Card v-for="card in me.hand" v-bind="getCards()[card.card]"></Card>
+              </div>
+            </div>
+            <div class="item item-end-turn" :class="{ 'player-active': me.turn }">
+              <div class="item-body"><button :disabled="enemy.turn">End Turn</button></div>
+            </div>
+          </div>
 </template>
 
 <style scoped>
@@ -113,18 +118,35 @@
   grid-column: 2 / span 2;
 }
 
-.item-alignment.Good { background-color: white;}
-.item-alignment.Evil { background-color: red; }
-.item-alignment.Lawful { background-color: gold; }
-.item-alignment.Chaotic { background-color: #4D1A69bb;}
-.item-alignment.Neutral { background-color: grey;}
+.item-alignment.Good {
+  background-color: white;
+}
+
+.item-alignment.Evil {
+  background-color: red;
+}
+
+.item-alignment.Lawful {
+  background-color: gold;
+}
+
+.item-alignment.Chaotic {
+  background-color: #4D1A69bb;
+}
+
+.item-alignment.Neutral {
+  background-color: grey;
+}
+
 .item-ethical-alignment {
   grid-column: 2;
   font-size: small;
 }
+
 .item-enemy-ethical-alignment {
   grid-row: 3;
 }
+
 .item-player-ethical-alignment {
   grid-row: 4;
 }
@@ -157,6 +179,7 @@
 .item-end-turn {
   grid-row: 6;
   grid-column: 4;
+  border: none;
 }
 
 .item-end-turn button {
@@ -187,7 +210,6 @@
 button:not([disabled]):hover {
   cursor: pointer;
 }
-
 </style>
 
 <script lang="ts">
