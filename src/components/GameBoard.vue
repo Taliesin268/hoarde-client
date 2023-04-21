@@ -6,7 +6,7 @@
     </div>
     <div class="item item-enemy-hand">
       <div class="item-title">Enemy Hand</div>
-      <div class="item-body">{{ enemy.hand }}</div>
+      <div class="item-body"><Card v-for="card in enemy.hand" v-bind="getCards()[card.card]"></Card></div>
     </div>
     <div class="item item-effects">
       <div class="item-title">Effects</div>
@@ -34,7 +34,7 @@
     </div>
     <div class="item item-hand">
       <div class="item-title">Hand</div>
-      <div class="item-body">{{ me.hand }}</div>
+      <div class="item-body"><Card v-for="card in me.hand" v-bind="getCards()[card.card]"></Card></div>
     </div>
     <div class="item item-end-turn">
       <div class="item-title">End / Rest</div>
@@ -62,8 +62,10 @@
 
 .item-body {
   display: flex;
-  justify-content: flex-start;
-  overflow: auto;
+  justify-content: center;
+  flex-shrink: 2;
+  gap: 1%;
+  height: 100%;
 }
 
 .item-title {
@@ -127,20 +129,38 @@
   width: 100%;
   height: 100%;
 }
+
+.card {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.item-hand .card:hover {
+  top: -50%;
+  height: 140%;
+}
+
+.item-enemy-hand .card:hover {
+  height: 140%;
+}
+
 </style>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
+import Card from '@/components/Card.vue'
 
 export default defineComponent({
   name: "game-board",
+  components: { Card },
   methods: {
     ...mapGetters({
       getGame: "game/getGame",
       getUser: "getUser",
       isCreator: "game/isCreator",
-      isPlayer: "game/isPlayer"
+      isPlayer: "game/isPlayer",
+      getCards: "getCards"
     }),
   },
   computed: {

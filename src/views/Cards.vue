@@ -16,11 +16,6 @@
   width: 100%;
   flex-wrap: wrap;
 }
-
-.card {
-  margin: 10px
-}
-
 </style>
 
 <script>

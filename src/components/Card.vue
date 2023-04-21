@@ -1,21 +1,21 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <h1 class="card-name">{{ cardName }}</h1>
-            <div class="card-wager">{{ cardWager }}</div>
+            <h1 class="card-name">{{ name }}</h1>
+            <div class="card-wager">{{ wager }}</div>
         </div>
-        <img :src="imageURL" :style="cardImageOptions">
-        <div class="textbox" :class="cardAlignments ? cardAlignments.toLowerCase() : ''">
-            <span class="type" v-if="cardType">{{ cardType }}</span>
-            <span class="rules-text">{{ cardRulesText }}</span>
+        <img :src="imageURL" :style="image_options">
+        <div class="textbox" :class="alignments ? alignments.toLowerCase() : ''">
+            <span class="type" v-if="type">{{ type }}</span>
+            <span class="rules-text">{{ rules_text }}</span>
         </div>
     </div>
 </template>
 
 <style scoped>
 .card {
-    width: 63mm;
-    height: 88mm;
+    max-width: 63mm;
+    max-height: 88mm;
 
     border: 2mm solid #161616;
     overflow: hidden;
@@ -111,17 +111,17 @@
 export default {
     name: 'Card',
     props: {
-        cardName: String,
-        cardWager: Number,
-        cardType: String,
-        cardRulesText: String,
-        cardAlignments: String,
-        cardImage: String,
-        cardImageOptions: {}
+        name: String,
+        wager: Number,
+        type: String,
+        rules_text: String,
+        alignments: String,
+        image: String,
+        image_options: {}
     },
     computed: {
         imageURL() {
-            return this.cardImage || require('@/images/unknown.png');
+            return this.image || require('@/images/unknown.png');
         }
     }
 }
