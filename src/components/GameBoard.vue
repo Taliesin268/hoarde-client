@@ -10,23 +10,23 @@
     </div>
     <div class="item item-effects">
       <div class="item-title">Effects</div>
-      <div class="item-body">{{ game.effects }}</div>
+      <div class="item-body">{{ game.effects.length < 1 ? "" : game.effects }}</div>
     </div>
     <div class="item item-deck">
       <div class="item-title">Deck</div>
-      <div class="item-body">{{ game.deck }}</div>
+      <div class="item-body">{{ game.deck.length }} cards left in deck</div>
     </div>
     <div class="item item-enemy-board">
       <div class="item-title">Enemy Board</div>
-      <div class="item-body">{{ enemy.board }}</div>
+      <div class="item-body">{{ enemy.board.length < 1 ? "" : enemy.board }}</div>
     </div>
     <div class="item item-discard">
       <div class="item-title">Discard</div>
-      <div class="item-body">{{ game.discard }}</div>
+      <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
     </div>
     <div class="item item-board">
       <div class="item-title">Board</div>
-      <div class="item-body">{{ me.board }}</div>
+      <div class="item-body">{{ me.board.length < 1 ? "" : me.board }}</div>
     </div>
     <div class="item item-gold">
       <div class="item-title">Gold</div>
