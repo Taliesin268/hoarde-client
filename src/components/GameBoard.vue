@@ -142,6 +142,7 @@
 
 .item-enemy-hand .card:hover {
   height: 140%;
+  top: 10%;
 }
 
 </style>

@@ -121,7 +121,7 @@ export default {
     },
     computed: {
         imageURL() {
-            return this.image || require('@/images/unknown.png');
+            return this.image ? `http://localhost:4000/images/${this.image}` : require('@/images/unknown.png');
         }
     }
 }
