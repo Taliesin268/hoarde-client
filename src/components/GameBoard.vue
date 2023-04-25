@@ -311,6 +311,7 @@ export default defineComponent({
         case "Played":
         case "FreePlayed": return "End Turn";
         case "Resting": return "Resting"
+        case "Waiting": return "...";
         default: return "Error: Unknown Game State";
       }
     }
