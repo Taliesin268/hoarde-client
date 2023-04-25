@@ -58,6 +58,14 @@ enum Turn {
     None
 }
 
+enum TurnState {
+    Ready = "Ready",
+    Played = "Played",
+    Waiting = "Waiting",
+    Resting = "Resting",
+    FreePlayed = "Free Played"
+}
+
 type PlayerBoardState = {
     board: Card[],
     hand: {
@@ -69,8 +77,7 @@ type PlayerBoardState = {
         alignment: EthicalAlignment,
         traits: AlignmentTrait[]
     },
-    first: boolean,
-    resting: boolean
+    turn: TurnState
 }
 
 type Game = {
@@ -100,7 +107,6 @@ type Game = {
                 }
             },
             effects: []; // TODO
-            turn: Turn;
             round: {
                 number: number,
                 moralAlignment: {

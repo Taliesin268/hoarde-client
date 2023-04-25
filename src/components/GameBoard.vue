@@ -1,10 +1,10 @@
 <template>
   <div class="grid-container">
-    <div class="item item-enemy-gold" :class="{ 'player-active': enemy.turn }">
+    <div class="item item-enemy-gold" :class="{ 'player-active': enemy.isTurn }">
       <div class="item-title">Enemy Gold</div>
       <div class="item-body">{{ enemy.gold }}</div>
     </div>
-    <div class="item item-enemy-hand" :class="{ 'player-active': enemy.turn }">
+    <div class="item item-enemy-hand" :class="{ 'player-active': enemy.isTurn }">
       <div class="item-title">Enemy Hand</div>
       <div class="item-body">
         <Card v-for="card in enemy.hand" v-bind="getCards()[card.card]"></Card>
@@ -18,7 +18,7 @@
         <div class="item-title">Deck</div>
         <div class="item-body">{{ game.deck.length }} cards left in deck</div>
       </div>
-      <div class="item item-enemy-board" :class="{ 'player-active': enemy.turn }">
+      <div class="item item-enemy-board" :class="{ 'player-active': enemy.isTurn }">
         <div class="item-title">Enemy Board</div>
         <div class="item-body">
           <Card v-for="card in enemy.board" v-bind="getCards()[card]"></Card>
@@ -45,24 +45,24 @@
           <div class="item-title">Discard</div>
           <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
           </div>
-          <div class="item item-board" :class="{ 'player-active': me.turn }">
+          <div class="item item-board" :class="{ 'player-active': me.isTurn }">
             <div class="item-title">Board</div>
             <div class="item-body">
                 <Card v-for="card in me.board" v-bind="getCards()[card]"></Card>
             </div>
             </div>
-            <div class="item item-gold" :class="{ 'player-active': me.turn }">
+            <div class="item item-gold" :class="{ 'player-active': me.isTurn }">
               <div class="item-title">Gold</div>
               <div class="item-body">{{ me.gold }}</div>
             </div>
-            <div class="item item-hand" :class="{ 'player-active': me.turn }">
+            <div class="item item-hand" :class="{ 'player-active': me.isTurn }">
               <div class="item-title">Hand</div>
               <div class="item-body">
                 <Card v-for="card in me.hand" v-bind="getCards()[card.card]" @click="activateCard(card.card)"></Card>
               </div>
             </div>
-            <div class="item item-end-turn" :class="{ 'player-active': me.turn }">
-              <div class="item-body"><button :disabled="enemy.turn">End Turn</button></div>
+            <div class="item item-end-turn" :class="{ 'player-active': me.isTurn }">
+              <div class="item-body"><button :disabled="enemy.isTurn">{{ endTurnText }}</button></div>
             </div>
           </div>
 </template>
@@ -260,11 +260,21 @@ export default defineComponent({
       if (this.isPlayer()) {
         return {
           gold: this.getGame().state.game.players.player.gold,
+          isTurn: 
+            this.getGame().state.game.round.players.player.turn == 'Ready' ||
+            this.getGame().state.game.round.players.player.turn == 'Free Played' ||
+            this.getGame().state.game.round.players.player.turn == 'Played'
+          ,
           ...this.getGame().state.game.round.players.player
         }
       } else {
         return {
           gold: this.getGame().state.game.players.creator.gold,
+          isTurn: 
+            (this.getGame().state.game.round.players.creator.turn == 'Ready' ||
+            this.getGame().state.game.round.players.creator.turn == 'Free Played' ||
+            this.getGame().state.game.round.players.creator.turn == 'Played')
+            ,
           ...this.getGame().state.game.round.players.creator
         }
       }
@@ -273,17 +283,36 @@ export default defineComponent({
       if (!this.isPlayer()) {
         return {
           gold: this.getGame().state.game.players.player.gold,
+          isTurn: 
+            this.getGame().state.game.round.players.player.turn == 'Ready' ||
+            this.getGame().state.game.round.players.player.turn == 'Free Played' ||
+            this.getGame().state.game.round.players.player.turn == 'Played'
+          ,
           ...this.getGame().state.game.round.players.player
         }
       } else {
         return {
           gold: this.getGame().state.game.players.creator.gold,
+          isTurn: 
+            this.getGame().state.game.round.players.creator.turn == 'Ready' ||
+            this.getGame().state.game.round.players.creator.turn == 'Free Played' ||
+            this.getGame().state.game.round.players.creator.turn == 'Played'
+            ,
           ...this.getGame().state.game.round.players.creator
         }
       }
     },
     game() {
       return this.getGame().state.game
+    },
+    endTurnText(): string {
+      switch (this.me.turn) {
+        case "Ready": return "Rest";
+        case "Played":
+        case "FreePlayed": return "End Turn";
+        case "Resting": return "Resting"
+        default: return "Error: Unknown Game State";
+      }
     }
   }
 });
