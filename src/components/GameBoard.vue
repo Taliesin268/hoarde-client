@@ -20,7 +20,9 @@
       </div>
       <div class="item item-enemy-board" :class="{ 'player-active': enemy.turn }">
         <div class="item-title">Enemy Board</div>
-        <div class="item-body">{{ enemy.board.length < 1 ? "" : enemy.board }}</div>
+        <div class="item-body">
+          <Card v-for="card in enemy.board" v-bind="getCards()[card]"></Card>
+          </div>
         </div>
         <div class="item item-enemy-wager item-wager">
           <div class="item-body">Wager: {{ enemy.wager }}</div>
