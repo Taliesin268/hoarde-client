@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="item item-end-turn" :class="{ 'player-active': me.isTurn }">
-              <div class="item-body"><button :disabled="enemy.isTurn">{{ endTurnText }}</button></div>
+              <div class="item-body"><button :disabled="enemy.isTurn" @click="endTurn()">{{ endTurnText }}</button></div>
             </div>
           </div>
 </template>
@@ -252,7 +252,8 @@ export default defineComponent({
       getCards: "getCards"
     }),
     ...mapActions({
-      activateCard: "game/activateCard"
+      activateCard: "game/activateCard",
+      endTurn: "game/endTurn"
     })
   },
   computed: {
