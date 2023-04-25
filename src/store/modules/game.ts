@@ -110,6 +110,7 @@ type Game = {
             effects: []; // TODO
             round: {
                 number: number,
+                turn: number,
                 moralAlignment: {
                     alignment: MoralAlignment,
                     traits: AlignmentTrait[]

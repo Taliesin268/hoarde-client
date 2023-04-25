@@ -43,7 +43,10 @@
         </div>
         <div class="item item-discard">
           <div class="item-title">Discard</div>
-          <div class="item-body">{{ game.discard.length < 1 ? "" : game.discard }}</div>
+            <div class="item-title">{{ game.discard.length }} cards</div>
+          <div class="item-body">
+            <Card v-for="card in game.discard.slice().reverse()" v-bind="getCards()[card.card]"></Card>
+          </div>
           </div>
           <div class="item item-board" :class="{ 'player-active': me.isTurn }">
             <div class="item-title">Board</div>
@@ -101,6 +104,11 @@
   text-align: center;
   padding: 1px;
   font-size: medium;
+}
+
+.item-title:nth-child(2) {
+  background-color: white;
+  border-bottom: none;
 }
 
 .item-enemy-gold {
@@ -173,6 +181,20 @@
 .item-discard {
   grid-row: 5 / span 3;
   grid-column: 1;
+}
+
+.item-discard > .item-body {
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.item-discard .card {
+  height: 88mm;
+  margin: auto;
 }
 
 .item-player-wager {
@@ -308,7 +330,10 @@ export default defineComponent({
     },
     endTurnText(): string {
       switch (this.me.turn) {
-        case "Ready": return "Rest";
+        case "Ready": 
+          if(this.game.round.turn < 3)
+            return "Forfeit Round";
+          return "Rest"
         case "Played":
         case "FreePlayed": return "End Turn";
         case "Resting": return "Resting"
