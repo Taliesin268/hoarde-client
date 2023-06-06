@@ -1,4 +1,35 @@
 <template>
+  <div id="floating-board" class="inactive">
+    <Card 
+      name="Benevolent Whelp"
+      wager=3
+      rules_text="Lawful."
+      alignments="Lawful"
+      type="Dragon"
+      ></Card>
+    <Card 
+      name="Malevolent Whelp"
+      wager=3
+      rules_text="Chaotic."
+      alignments="Chaotic"
+      type="Dragon"
+      ></Card>
+    <Card 
+      name="Caring Whelp"
+      wager=3
+      rules_text="Good."
+      alignments="Good"
+      type="Dragon"
+      ></Card>
+    <Card 
+      name="Malicious Whelp"
+      wager=3
+      rules_text="Evil."
+      alignments="Evil"
+      type="Dragon"
+      ></Card>
+
+  </div>
   <div class="grid-container">
     <div class="item item-enemy-gold" :class="{ 'player-active': enemy.isTurn }">
       <div class="item-title">Enemy Gold</div>
@@ -71,6 +102,24 @@
 </template>
 
 <style scoped>
+#floating-board {
+  position:absolute;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  background-color: #ffffff55;
+}
+
+#floating-board.inactive {
+  display: none;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 19.75% 29.5% 29.5% 19.75%;
