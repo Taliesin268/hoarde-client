@@ -10,6 +10,7 @@ export class User {
 
 export class State {
   cards: Array<Object> = [];
+  tokens: Record<string, Object> = {};
   user: User = new User();
   createUserPromise: Promise<void> | null = null;
 }
@@ -17,6 +18,9 @@ export class State {
 const mutations = <MutationTree<State>>{
     SET_CARDS(state, cards) {
       state.cards = cards;
+    },
+    SET_TOKENS(state, tokens) {
+      state.tokens = tokens
     },
     SET_USER(state, user) {
       state.user.id = user.id;
@@ -38,6 +42,8 @@ const actions = <ActionTree<State, any>>{
           "http://localhost:4000/cards"
         );
         commit("SET_CARDS", data.data);
+        const tokenData = await axios.get("http://localhost:4000/tokens")
+        commit("SET_TOKENS", tokenData.data)
       } catch (error) {
         alert(error);
         console.log(error);
@@ -88,7 +94,8 @@ const actions = <ActionTree<State, any>>{
 
 const getters = <GetterTree<State, any>>{
     getCards: (state) => state.cards,
-    getUser: (state) => state.user
+    getUser: (state) => state.user,
+    getTokens: (state) => state.tokens
 }
 
 export default new Vuex.Store({

@@ -1,34 +1,7 @@
 <template>
   <div id="floating-board" class="inactive">
     <Card 
-      name="Benevolent Whelp"
-      wager=3
-      rules_text="Lawful."
-      alignments="Lawful"
-      type="Dragon"
-      ></Card>
-    <Card 
-      name="Malevolent Whelp"
-      wager=3
-      rules_text="Chaotic."
-      alignments="Chaotic"
-      type="Dragon"
-      ></Card>
-    <Card 
-      name="Caring Whelp"
-      wager=3
-      rules_text="Good."
-      alignments="Good"
-      type="Dragon"
-      ></Card>
-    <Card 
-      name="Malicious Whelp"
-      wager=3
-      rules_text="Evil."
-      alignments="Evil"
-      type="Dragon"
-      ></Card>
-
+      v-for="card in whelps" v-bind="card"></Card>
   </div>
   <div class="grid-container">
     <div class="item item-enemy-gold" :class="{ 'player-active': enemy.isTurn }">
@@ -118,6 +91,14 @@
 
 #floating-board.inactive {
   display: none;
+}
+
+#floating-board div {
+  cursor: pointer;
+}
+
+#floating-board .card:hover {
+  box-shadow: 0px 0px 1rem 1px gold;
 }
 
 .grid-container {
@@ -320,7 +301,8 @@ export default defineComponent({
       getUser: "getUser",
       isCreator: "game/isCreator",
       isPlayer: "game/isPlayer",
-      getCards: "getCards"
+      getCards: "getCards",
+      tokens: "getTokens"
     }),
     ...mapActions({
       activateCard: "game/activateCard",
@@ -328,6 +310,14 @@ export default defineComponent({
     })
   },
   computed: {
+    whelps() {
+      return [
+        this.tokens()["Benevolent Whelp"],
+        this.tokens()["Malevolent Whelp"],
+        this.tokens()["Caring Whelp"],
+        this.tokens()["Malicious Whelp"],
+      ]
+    },
     me(): Record<string, any> {
       if (this.isPlayer()) {
         return {
